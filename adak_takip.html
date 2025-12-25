@@ -1,0 +1,3074 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Adak Takip Paneli</title>
+    
+<style>
+    :root {
+        --primary: #576574; --secondary: #8395a7; --accent: #10ac84;
+        --bg: #f5f6fa; --white: #ffffff; --text: #222f3e;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+           background: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.5; }
+    .container { max-width: 900px; margin: auto; }
+    
+    /* Header & Stats */
+    .header { background: var(--white); padding: 25px; border-radius: 20px; text-align: center; 
+                margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .header h1 { margin: 0; font-size: 1.4rem; color: var(--primary); }
+    .top-stats { display: flex; justify-content: space-around; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+    .stat-card { text-align: center; }
+    .stat-card small { color: var(--secondary); font-size: 0.75rem; text-transform: uppercase; display: block; }
+    .stat-card b { font-size: 1.2rem; color: var(--accent); }
+
+    /* Mıntıka Kartları */
+    .m-card { background: var(--white); border-radius: 16px; margin-bottom: 12px; overflow: hidden; 
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #eee; }
+    .m-header { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; 
+                background: #fdfdfd; transition: background 0.2s; }
+    .m-header:active { background: #f1f2f6; }
+    .m-title { font-weight: 700; color: var(--primary); }
+
+    /* Personel (Referans) Satırları */
+    .ref-area { display: none; background: #fafafa; padding: 10px; }
+    .ref-row { background: var(--white); border-radius: 12px; margin-bottom: 8px; border: 1px solid #efefef; }
+    .ref-header { padding: 14px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+    .ref-top { display: flex; justify-content: space-between; align-items: center; }
+    .ref-name { font-weight: 600; font-size: 1rem; color: #54a0ff; }
+    .ref-stats { font-size: 0.85rem; color: #8395a7; display: flex; gap: 10px; }
+    .badge-qty { background: #eeeff1; color: #576574; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
+
+    /* Detay Tablosu */
+    .detail-container { display: none; padding: 10px; overflow-x: auto; background: #fff; border-top: 1px solid #f1f1f1; }
+    table { width: 100%; border-collapse: collapse; min-width: 450px; }
+    th { text-align: left; font-size: 0.75rem; color: #999; padding: 8px; border-bottom: 1px solid #eee; }
+    td { padding: 12px 8px; border-bottom: 1px solid #f9f9f9; font-size: 0.85rem; }
+    
+    /* Alt Özet */
+    .summary-footer { background: #2f3542; color: white; padding: 20px; border-radius: 20px; margin-top: 30px; }
+    .summary-footer h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: #a4b0be; }
+    .month-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #57606f; font-size: 0.9rem; }
+    
+    .price { color: var(--accent); font-weight: 700; }
+    .arrow { font-size: 0.7rem; color: #ccc; }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ADAK TAKİP DASHBOARD</h1>
+            <div class="top-stats">
+                <div class="stat-card"><small>Genel Toplam</small><b>344 Adet</b></div>
+                <div class="stat-card"><small>Toplam Alacak</small><b>1,355,500 TL</b></div>
+            </div>
+        </div>
+
+        
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MATLASYOLU')">
+            <span class="m-title">📍 ATLASYOLU</span>
+            <span style="font-size:0.9rem;">193 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MATLASYOLU" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUAHMETÖZTÜRK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 AHMET ÖZTÜRK</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUAHMETÖZTÜRK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>FERHAN ŞAHİN</b></td>
+                    <td><small>10.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUALİYILDIRIM')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ALİ YILDIRIM</span>
+                    <span class="price">8,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">2 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUALİYILDIRIM" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ZEYNEP KAMİLE YILDIRIM</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUHAMMET İŞCAN</b></td>
+                    <td><small>21.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUEMREÇİL')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 EMRE ÇİL</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUEMREÇİL" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>LÜTFİ ZENCİRCİ</b></td>
+                    <td><small>30.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUFATİHBİLGİNER')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 FATİH BİLGİNER</span>
+                    <span class="price">68,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">17 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUFATİHBİLGİNER" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>İSMAİL İSİLİ</b></td>
+                    <td><small>25.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İBRAHİM GÜNAYDIN</b></td>
+                    <td><small>23.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YAVUZ KÖSE</b></td>
+                    <td><small>23.12.2025</small></td>
+                    <td><span class="badge-qty">8</span></td>
+                    <td class="price">32,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ADEM KENT</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAMZA ÇELİK</b></td>
+                    <td><small>23.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET EMİN KOŞAN</b></td>
+                    <td><small>20.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATİH BİLGİNER</b></td>
+                    <td><small>19.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF TÜRK</b></td>
+                    <td><small>16.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SERHAT BOZOĞLU</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATİH ÖZER</b></td>
+                    <td><small>30.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUHASANÇİÇEK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 HASAN ÇİÇEK</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUHASANÇİÇEK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>FURKAN SEZER</b></td>
+                    <td><small>12.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUKEMALDEMİRKAN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 KEMAL DEMİRKAN</span>
+                    <span class="price">12,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">3 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUKEMALDEMİRKAN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>MEHMET KEMAL DEMİRKAN</b></td>
+                    <td><small>15.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET KEMAL DEMİRKAN</b></td>
+                    <td><small>24.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AYSEL SENA BİRECİKLİ</b></td>
+                    <td><small>21.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUKENANOCAKTAN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 KENAN OCAKTAN</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUKENANOCAKTAN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>BİLGİHAN ÇAKAR</b></td>
+                    <td><small>24.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUMUHARREMÖZTÜRK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MUHARREM ÖZTÜRK</span>
+                    <span class="price">302,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">77 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUMUHARREMÖZTÜRK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>YAKUP ÇİÇEK</b></td>
+                    <td><small>23.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YASİN KİBAR</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NURETTİN KARADUMAN</b></td>
+                    <td><small>25.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İCLAL YILDIRIM</b></td>
+                    <td><small>14.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TUNÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TUNÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TUNÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TUNÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TUNÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ALİ CEYLAN</b></td>
+                    <td><small>07.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA SELİMOĞLU</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SEYFETTİN GAMBER</b></td>
+                    <td><small>27.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İSTANBUL LİSE KOMİSYONU</b></td>
+                    <td><small>27.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BÜNYAMİN DURMUŞ</b></td>
+                    <td><small>25.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HÜSEYİN ÜNAL</b></td>
+                    <td><small>24.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUNUS EMRAH YILDIRIM</b></td>
+                    <td><small>18.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MERHUM MEHMET YILMAZ</b></td>
+                    <td><small>19.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ERGÜN SİNKİLER</b></td>
+                    <td><small>19.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SEMİH ÇINAR DEVECİ</b></td>
+                    <td><small>19.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HALİL YILDIZ</b></td>
+                    <td><small>15.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF KOCACIK</b></td>
+                    <td><small>14.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>CANTEKİNLER AİLESİ</b></td>
+                    <td><small>14.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HALİL YILDIZ</b></td>
+                    <td><small>15.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUHARREM ÖZTÜRK</b></td>
+                    <td><small>13.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FEYYAZ TURAN</b></td>
+                    <td><small>04.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FEYYAZ TURAN</b></td>
+                    <td><small>04.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ELİF ÖZTÜRK</b></td>
+                    <td><small>28.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FEYZA AYHAN</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KAZIM KÜTÜK</b></td>
+                    <td><small>20.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SEYFETTİN GAMBER</b></td>
+                    <td><small>08.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ELİF ÖZTÜRK</b></td>
+                    <td><small>16.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">2,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA RÜÇHAN ERBAŞ</b></td>
+                    <td><small>08.10.2025</small></td>
+                    <td><span class="badge-qty">2</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NİZAMETTİN SAĞLAM</b></td>
+                    <td><small>06.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NİZAMETTİN SAĞLAM</b></td>
+                    <td><small>06.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ALİ ALTUNSU</b></td>
+                    <td><small>07.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET SELİM YALÇIN</b></td>
+                    <td><small>07.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KAZIM KÜTÜK</b></td>
+                    <td><small>03.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ALİ ALTUNSU</b></td>
+                    <td><small>02.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HÜSEYİN ŞAHİN</b></td>
+                    <td><small>25.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUNUS EMRAH YILDIRIM</b></td>
+                    <td><small>17.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BEKİR UYAR</b></td>
+                    <td><small>12.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>DAVUT YAMLI</b></td>
+                    <td><small>15.09.2025</small></td>
+                    <td><span class="badge-qty">5</span></td>
+                    <td class="price">20,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TALHA KARAMAN</b></td>
+                    <td><small>03.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA YASİN ÇATKAYA</b></td>
+                    <td><small>03.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SÜLEYMAN TUĞRUL</b></td>
+                    <td><small>21.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ALİ ALTUNSU</b></td>
+                    <td><small>21.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TALHA KARAMAN</b></td>
+                    <td><small>19.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TUNAHAN AKSOY</b></td>
+                    <td><small>05.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SÜMEYYE EVREN</b></td>
+                    <td><small>06.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUZAFFER ÖZDEMİR</b></td>
+                    <td><small>10.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULLAH ÖZTÜRK</b></td>
+                    <td><small>11.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET FATİH GÜLTEKİN</b></td>
+                    <td><small>11.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN KUYUCUOĞLU</b></td>
+                    <td><small>27.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KADİR ALMAK</b></td>
+                    <td><small>27.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN KUYUCUOĞLU</b></td>
+                    <td><small>27.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN KUYUCUOĞLU</b></td>
+                    <td><small>29.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BEKİR UYAR</b></td>
+                    <td><small>29.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HÜSEYİN ÜNAL</b></td>
+                    <td><small>01.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TUNAHAN AKSOY</b></td>
+                    <td><small>21.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İSMAİL MERT ARSLANYOLU</b></td>
+                    <td><small>22.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURAT KAAN</b></td>
+                    <td><small>20.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN KUYUCUOĞLU</b></td>
+                    <td><small>06.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN KUYUCUOĞLU</b></td>
+                    <td><small>06.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHMAN TELCİ</b></td>
+                    <td><small>2.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SULTAN KURU</b></td>
+                    <td><small>1.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SULTAN KURU</b></td>
+                    <td><small>1.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NECLA CABAR</b></td>
+                    <td><small>1.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA HİLMİ CAVA</b></td>
+                    <td><small>13.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SÜLEYMAN BEY</b></td>
+                    <td><small>27.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>UNİMATE MEDİA</b></td>
+                    <td><small>27.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KEREM ALP KURUMAHMUT</b></td>
+                    <td><small>23.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES BAHATTİN DÖNMEZ</b></td>
+                    <td><small>13.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUYUNUSEMRAHYILDIRIM')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 YUNUS EMRAH YILDIRIM</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUYUNUSEMRAHYILDIRIM" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>YUSUF ALİ ÜSTÜN</b></td>
+                    <td><small>30.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUYUSUFALİBİLGİN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 YUSUF ALİ BİLGİN</span>
+                    <span class="price">36,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">9 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUYUSUFALİBİLGİN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>İDİL SARE TOR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN ARTAR</b></td>
+                    <td><small>15.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>EKİCİ AİLESİ</b></td>
+                    <td><small>03.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HÜSAMETTİN KIZILTUNÇ</b></td>
+                    <td><small>06.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SİNAN KORKMAZ</b></td>
+                    <td><small>02.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDÜLKERİM KURT</b></td>
+                    <td><small>12.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RABİA DEMİRCİ</b></td>
+                    <td><small>28.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>VEYSEL DEMİRCİ</b></td>
+                    <td><small>1.07.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HATİCE GÜLDEREN ER</b></td>
+                    <td><small>2.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUÖMERAKINCI')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ÖMER AKINCI</span>
+                    <span class="price">60,500 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">17 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUÖMERAKINCI" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RESUL ATEŞ</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">2,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ZEHRA NUR</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FEYYAZ TURAN</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">3,500</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ÖMER NURİ AŞMA</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KEREM ÇELİKTEN</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SAHİBİ NİYETİNE</b></td>
+                    <td><small>28.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">2,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>25.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>23.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>DÖNSEL DÜNDAR</b></td>
+                    <td><small>19.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>14.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ÖMER AKINCI</b></td>
+                    <td><small>30.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ÖMER AKINCI</b></td>
+                    <td><small>09.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NEVZAT AKDEDE</b></td>
+                    <td><small>19.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">1,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ÖMER AKINCI</b></td>
+                    <td><small>08.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ÖMER AKINCI</b></td>
+                    <td><small>23.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUİBRAHYMELMRINİ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 İBRAHYM ELMRINİ</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUİBRAHYMELMRINİ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>30.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MATLASYOLUİBRAHİMDEMİRCİ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 İBRAHİM DEMİRCİ</span>
+                    <span class="price">241,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">62 Adet</span></span>
+                </div>
+            </div>
+            <div id="MATLASYOLUİBRAHİMDEMİRCİ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>MURTEZA KABUK</b></td>
+                    <td><small>25.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURTEZA KABUK</b></td>
+                    <td><small>25.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ESMA AYKOL</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FARUK AYDOGDU</b></td>
+                    <td><small>18.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BİLAL TELCİ</b></td>
+                    <td><small>13.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İBRAHİM DEMİRCİ</b></td>
+                    <td><small>14.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">2,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BARIŞ GÜNEYSU</b></td>
+                    <td><small>15.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BURAK YEŞİLKÖK</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURTEZA KABUK</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SÜLEYMAN HİLMİ TUNA</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET FARUK SARIKAYA</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>GÜLSEN ÇİMEN ÖZCAN</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SİNAN KADIOĞLU</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İSMAİL SERİN</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>OSMAN KALKAN</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAMAZAN TOPÇU</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURTEZA KABUK</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İSMAİL SERİN</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURAT ÖZGÜN</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>OSMAN KALKAN</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ATLASYOLU OFİSİ</b></td>
+                    <td><small>26.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET IŞIK</b></td>
+                    <td><small>29.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BARIŞ GÜNEYSU</b></td>
+                    <td><small>18.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BARIŞ GÜNEYSU</b></td>
+                    <td><small>18.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SİNAN SUSAM</b></td>
+                    <td><small>15.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>BARIŞ GÜNEYSU</b></td>
+                    <td><small>12.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAYRETTİN TOPHAN</b></td>
+                    <td><small>14.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>VEYSEL DEMİRCİ</b></td>
+                    <td><small>03.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KAMİL SÖYLER</b></td>
+                    <td><small>04.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SİNAN SUSAM</b></td>
+                    <td><small>31.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURTEZA KABUK</b></td>
+                    <td><small>01.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>EYÜP YAZICIOĞLU</b></td>
+                    <td><small>03.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHİM YAYLACI</b></td>
+                    <td><small>22.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ECEM ÖZCAN</b></td>
+                    <td><small>23.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SİNAN SUSAM</b></td>
+                    <td><small>13.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SUZAN SEVİM</b></td>
+                    <td><small>18.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">3,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHİM YAYLACI</b></td>
+                    <td><small>20.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHİM YAYLACI</b></td>
+                    <td><small>20.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHİM YAYLACI</b></td>
+                    <td><small>20.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDURRAHİM YAYLACI</b></td>
+                    <td><small>08.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İBRAHİM DEMİRCİ</b></td>
+                    <td><small>07.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">1,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA BÜYÜKKAFES</b></td>
+                    <td><small>07.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FAHRİHAN ŞAHİN</b></td>
+                    <td><small>18.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABİDİN GÜLTEKİN</b></td>
+                    <td><small>01.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATMA KESİKTAŞ</b></td>
+                    <td><small>28.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">3,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SELMAN AYIK</b></td>
+                    <td><small>18.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET FARUK SARIKAYA</b></td>
+                    <td><small>16.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İBRAHİM DEMİRCİ</b></td>
+                    <td><small>16.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>EMİN GÖZCÜ</b></td>
+                    <td><small>29.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP CEMAL ÇENDİK</b></td>
+                    <td><small>1.07.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET GÜRSES</b></td>
+                    <td><small>18.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MESUT SAHİN</b></td>
+                    <td><small>19.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSA OZALP</b></td>
+                    <td><small>19.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET GÜRSES</b></td>
+                    <td><small>18.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUHARREM ÖZTÜRK</b></td>
+                    <td><small>27.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET KEMAL DEMİRKAN</b></td>
+                    <td><small>19.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET KEMAL DEMİRKAN</b></td>
+                    <td><small>12.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN AKCA</b></td>
+                    <td><small>14.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SAFİYE KERVAN</b></td>
+                    <td><small>15.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KEVSER CAN</b></td>
+                    <td><small>16.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MEYÜPSULTAN')">
+            <span class="m-title">📍 EYÜP SULTAN</span>
+            <span style="font-size:0.9rem;">7 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MEYÜPSULTAN" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MEYÜPSULTANMEHMETİBERMEK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MEHMET İBERMEK</span>
+                    <span class="price">16,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">4 Adet</span></span>
+                </div>
+            </div>
+            <div id="MEYÜPSULTANMEHMETİBERMEK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>DÖNDÜ BALSU</b></td>
+                    <td><small>18.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>EYLÜL DUMAN</b></td>
+                    <td><small>13.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ŞEYDA ERVA ÜNVER</b></td>
+                    <td><small>26.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TALİP AĞIN</b></td>
+                    <td><small>19.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MEYÜPSULTANTUNAHANCENGİZ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 TUNAHAN CENGİZ</span>
+                    <span class="price">8,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">2 Adet</span></span>
+                </div>
+            </div>
+            <div id="MEYÜPSULTANTUNAHANCENGİZ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ALİ OSMAN BAŞARSLAN</b></td>
+                    <td><small>18.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MELİKA DEMİRAL</b></td>
+                    <td><small>11.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MEYÜPSULTANÖMERÖZBAY')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ÖMER ÖZBAY</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MEYÜPSULTANÖMERÖZBAY" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ERSİN KAYA</b></td>
+                    <td><small>26.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MFAS')">
+            <span class="m-title">📍 FAS</span>
+            <span style="font-size:0.9rem;">110 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MFAS" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASABDÜŞŞAFİELABBAS')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ABDÜŞŞAFİ ELABBAS</span>
+                    <span class="price">112,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">28 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASABDÜŞŞAFİELABBAS" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İHSAN FARUK YAŞAR</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ZEHEDDİN BALCI</b></td>
+                    <td><small>17.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MİRAY BULUT</b></td>
+                    <td><small>17.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FARUK YAŞAR</b></td>
+                    <td><small>19.12.2025</small></td>
+                    <td><span class="badge-qty">10</span></td>
+                    <td class="price">40,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA DEĞİRMENCİ</b></td>
+                    <td><small>15.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TALAT ÖZKAN</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MURADİYE KÜBRA AKSU ÖZGÜN</b></td>
+                    <td><small>09.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HARUN DOĞUKAN ÇAĞLAR</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YAŞAR DALGIÇ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>NERİMAN İŞLER</b></td>
+                    <td><small>07.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SAHİBİ NİYETİNE</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TALAT ÖZKAN</b></td>
+                    <td><small>06.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDECHAFİ EL ABBASS</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDECHAFİ EL ABBASS</b></td>
+                    <td><small>02.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASBACHIRMERROUN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 BACHIR MERROUN</span>
+                    <span class="price">16,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">4 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASBACHIRMERROUN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ELBACHIR MERROUN</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ELBACHIR MERROUN</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ELBACHIR MERROUN</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ELBACHIR MERROUN</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASEMREÇİL')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 EMRE ÇİL</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASEMREÇİL" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>FATİH ALİ YILDIZ</b></td>
+                    <td><small>18.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMEHMETOBUZ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MEHMET OBUZ</span>
+                    <span class="price">76,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">19 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMEHMETOBUZ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>MERHUM MEHMET KIYRAN</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>DAVUT BERZAN KARTAL</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TAHA HUZEYFE USLU</b></td>
+                    <td><small>19.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>GÖKÇE NEVA UĞUR</b></td>
+                    <td><small>17.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TURGUT ÇEŞMELŞ</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HİLAL ÇALHAN</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAVVA YENER</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>GÜLEFER AKKAYA</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ADEM YÜZEN</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SELAMİ SOYLU VE SÜMEYYE SOYLU</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">2</span></td>
+                    <td class="price">8,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>GÜLEFER AKKAYA</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MEHMET OBUZ</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMERTBASUT')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MERT BASUT</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMERTBASUT" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>TARABYA LİSE</b></td>
+                    <td><small>06.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMOHAMEDSAİDHALHOUL')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MOHAMED SAİD HALHOUL</span>
+                    <span class="price">8,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">2 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMOHAMEDSAİDHALHOUL" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ATİLLA BELHAN</b></td>
+                    <td><small>16.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ADBURRAHMAN ÖZGÜRCÜ</b></td>
+                    <td><small>18.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMOHAMEDSAİD‪HALHOUL')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MOHAMED SAİD‪ HALHOUL</span>
+                    <span class="price">40,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">10 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMOHAMEDSAİD‪HALHOUL" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>FATMA GÜLŞEN DÖNMEZ</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>19.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULLAH ALTIN</b></td>
+                    <td><small>15.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET ÜÇPINAR</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>TARKAN AKSOY AİLESİ ELİF AKSOY MEHMET ENES AKSOY TUĞBA ÖZGEN VE TÜM AİLE</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ŞERAFETTİN EROL</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MOHAMED SAİD HALHOUL</b></td>
+                    <td><small>28.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>22.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMOHAMEDYAKHLIF')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MOHAMED YAKHLIF</span>
+                    <span class="price">116,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">29 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMOHAMEDYAKHLIF" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>FATİH YILMAZER</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATİH YILMAZER</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>AHMET ÇELİK</b></td>
+                    <td><small>24.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KERİM ÇAVAN</b></td>
+                    <td><small>21.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HASAN VE FETHİYE ASLAN</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HÜSNÜ BORUC</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SEDAT KARAKAYA</b></td>
+                    <td><small>17.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HALİL İBRAHİM KOÇAK</b></td>
+                    <td><small>18.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATİH YILMAZER</b></td>
+                    <td><small>19.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ASİYE ZOR</b></td>
+                    <td><small>18.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>GÜLÜMSER ERDAL</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAVVA MİMİR</b></td>
+                    <td><small>09.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KERİM ÇELİK</b></td>
+                    <td><small>12.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MİSTER KEBAB</b></td>
+                    <td><small>12.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ALİ LÖK</b></td>
+                    <td><small>06.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ADEM UYSAL</b></td>
+                    <td><small>07.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>KADRİYE KÜÇÜKKALAY</b></td>
+                    <td><small>08.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ŞEVVAL MİMİR</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MOHAMED YAKHLIF</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULMELİK KOÇ VE AİLESİ</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSA KÜRK VE AİLESİ</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RAZİYE MUŞTU</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MİSTER KEBAB ( RESTORANT )</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>DERYA AY</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SELİN KUŞKONMAZ</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAKAN ÖZKAN</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ANDAS RAYAN</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HABİB ZGUEB</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ZÜLFİYE BEYGE</b></td>
+                    <td><small>05.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMOHAMEDsaid')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MOHAMED said</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMOHAMEDsaid" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>AYNUR KAÇARIM</b></td>
+                    <td><small>16.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASMOHAMEDsaidHALHOUL')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MOHAMED said HALHOUL</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASMOHAMEDsaidHALHOUL" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>MUSTAFA TUNAHAN</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASRACHIDAKRİKEZ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 RACHID AKRİKEZ</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASRACHIDAKRİKEZ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>RACHID AKRİKEZ</b></td>
+                    <td><small>03.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFASRECEPDURAN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 RECEP DURAN</span>
+                    <span class="price">52,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">13 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFASRECEPDURAN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>RACHID AKRİKEZ</b></td>
+                    <td><small>20.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RACHID AKRİKEZ</b></td>
+                    <td><small>22.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>23.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>10.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>10.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>10.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>11.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RACHID AKRİKEZ</b></td>
+                    <td><small>12.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>06.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULAZİZ ETTAOUYL</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULAZİZ ETTAOUYL</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ABDULAZİZ ETTAOUYL</b></td>
+                    <td><small>03.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>RECEP DURAN</b></td>
+                    <td><small>30.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MFATIH')">
+            <span class="m-title">📍 FATİH</span>
+            <span style="font-size:0.9rem;">4 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MFATIH" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFATIHADEMZEYBEK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ADEM ZEYBEK</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFATIHADEMZEYBEK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>HASAN ŞENOL SEKBAN</b></td>
+                    <td><small>15.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MFATIHBÜNYAMİNAĞABİĞİM')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 BÜNYAMİN AĞABİĞİM</span>
+                    <span class="price">12,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">3 Adet</span></span>
+                </div>
+            </div>
+            <div id="MFATIHBÜNYAMİNAĞABİĞİM" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>BÜŞRA OBALAR</b></td>
+                    <td><small>25.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>EMİN KÖSE</b></td>
+                    <td><small>29.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>CENK ALİ GÜNEŞ</b></td>
+                    <td><small>22.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MKAGITHANE')">
+            <span class="m-title">📍 KAĞITHANE</span>
+            <span style="font-size:0.9rem;">5 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MKAGITHANE" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MKAGITHANEMERTBASUT')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MERT BASUT</span>
+                    <span class="price">12,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">3 Adet</span></span>
+                </div>
+            </div>
+            <div id="MKAGITHANEMERTBASUT" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>DİLARA GÜNSEV</b></td>
+                    <td><small>25.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>SADULLAH TÜFEKÇİ</b></td>
+                    <td><small>25.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HATİCE GÜLER</b></td>
+                    <td><small>09.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MKAGITHANEMUHARREMÖZTÜRK')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MUHARREM ÖZTÜRK</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MKAGITHANEMUHARREMÖZTÜRK" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>HÜSEYİN ÜNAL</b></td>
+                    <td><small>04.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MKAGITHANEŞÜKRÜDEMİR')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ŞÜKRÜ DEMİR</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MKAGITHANEŞÜKRÜDEMİR" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>HİLMİ RAFET DEMİR</b></td>
+                    <td><small>20.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MSULTANGAZI')">
+            <span class="m-title">📍 SULTANGAZİ</span>
+            <span style="font-size:0.9rem;">6 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MSULTANGAZI" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MSULTANGAZIALİÇAYIR')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ALİ ÇAYIR</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MSULTANGAZIALİÇAYIR" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ESRA ÇELİKOL</b></td>
+                    <td><small>07.07.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MSULTANGAZIHULUSİDİŞ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 HULUSİ DİŞ</span>
+                    <span class="price">8,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">2 Adet</span></span>
+                </div>
+            </div>
+            <div id="MSULTANGAZIHULUSİDİŞ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>MUSA ŞAŞTI</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSA ŞAŞTI</b></td>
+                    <td><small>01.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MSULTANGAZIYUNUSSELİMKARAHAN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 YUNUS SELİM KARAHAN</span>
+                    <span class="price">12,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">3 Adet</span></span>
+                </div>
+            </div>
+            <div id="MSULTANGAZIYUNUSSELİMKARAHAN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>İBRAHİM VURGUN</b></td>
+                    <td><small>26.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES BEY</b></td>
+                    <td><small>07.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>HAVVA KARAGÜL</b></td>
+                    <td><small>21.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+    <div class="m-card">
+        <div class="m-header" onclick="toggle('MYILDIZ')">
+            <span class="m-title">📍 YILDIZ</span>
+            <span style="font-size:0.9rem;">19 Adet <span class="arrow">▼</span></span>
+        </div>
+        <div id="MYILDIZ" class="ref-area">
+    
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZAHMETHİLMİGÜNER')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 AHMET HİLMİ GÜNER</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZAHMETHİLMİGÜNER" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>İBRAHİM KURTULUŞ</b></td>
+                    <td><small>20.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZENESEKİZ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 ENES EKİZ</span>
+                    <span class="price">44,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">11 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZENESEKİZ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>09.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>04.12.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>27.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>05.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>05.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>24.10.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>ENES İKİZ</b></td>
+                    <td><small>24.09.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZHARUNKİRİŞ')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 HARUN KİRİŞ</span>
+                    <span class="price">8,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">2 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZHARUNKİRİŞ" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>AYŞE OĞLU ŞABAN</b></td>
+                    <td><small>01.08.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>İBRAHİM ALTAY</b></td>
+                    <td><small>31.05.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZMEHMETGÜR')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MEHMET GÜR</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZMEHMETGÜR" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>NEŞE TURAN</b></td>
+                    <td><small>24.11.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZMUSTAFAKURT')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 MUSTAFA KURT</span>
+                    <span class="price">12,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">3 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZMUSTAFAKURT" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>HAKAN ÇARKCI</b></td>
+                    <td><small>11.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>FATİH BENZER</b></td>
+                    <td><small>5.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            
+                <tr>
+                    <td><b>MUSTAFA KURT</b></td>
+                    <td><small>5.06.2025 </small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div>
+        <div class="ref-row">
+            <div class="ref-header" onclick="toggle('MYILDIZYUSUFERUZUN')">
+                <div class="ref-top">
+                    <span class="ref-name">👤 YUSUF ERUZUN</span>
+                    <span class="price">4,000 TL</span>
+                </div>
+                <div class="ref-stats">
+                    <span>Toplam: <span class="badge-qty">1 Adet</span></span>
+                </div>
+            </div>
+            <div id="MYILDIZYUSUFERUZUN" class="detail-container">
+                <table>
+                    <thead><tr><th>Müşteri</th><th>Tarih</th><th>Adet</th><th>Kalan</th></tr></thead>
+                    <tbody>
+        
+                <tr>
+                    <td><b>YUSUF ERUZUN</b></td>
+                    <td><small>30.06.2025</small></td>
+                    <td><span class="badge-qty">1</span></td>
+                    <td class="price">4,000</td>
+                </tr>
+            </tbody></table></div></div></div></div>
+
+        <div class="summary-footer">
+            <h3>📅 Aylara Göre Dağılım</h3>
+            
+    <div class="month-row">
+        <span>Haziran 2025 </span>
+        <span><b>7</b> Adet</span>
+        <span class="price">28,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Temmuz 2025 </span>
+        <span><b>2</b> Adet</span>
+        <span class="price">8,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Mayıs 2025</span>
+        <span><b>20</b> Adet</span>
+        <span class="price">80,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Haziran 2025</span>
+        <span><b>13</b> Adet</span>
+        <span class="price">52,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Temmuz 2025</span>
+        <span><b>19</b> Adet</span>
+        <span class="price">76,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Ağustos 2025</span>
+        <span><b>17</b> Adet</span>
+        <span class="price">67,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Eylül 2025</span>
+        <span><b>17</b> Adet</span>
+        <span class="price">68,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Ekim 2025</span>
+        <span><b>37</b> Adet</span>
+        <span class="price">135,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Kasım 2025</span>
+        <span><b>43</b> Adet</span>
+        <span class="price">170,000.00 TL</span>
+    </div>
+    <div class="month-row">
+        <span>Aralık 2025</span>
+        <span><b>169</b> Adet</span>
+        <span class="price">671,500.00 TL</span>
+    </div>
+        </div>
+        <p style="text-align:center; color:#bdc3c7; font-size:0.7rem; margin-top:30px;">Cihaz uyumlu raporlama sistemi</p>
+    </div>
+
+    <script>
+        function toggle(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none" || x.style.display === "") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
